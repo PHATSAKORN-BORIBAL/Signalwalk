@@ -1,0 +1,51 @@
+# SignalWalk - default configuration. No secrets belong in this file.
+
+thresholds:            # signal strength in dBm (higher = stronger)
+  strong_dbm: -55      # comfortable for anything
+  weak_dbm: -70        # video calls and streaming start to struggle below this
+  dead_dbm: -80        # barely connected
+
+grid:
+  cell_m: 0.25         # resolution of the drawn map
+  placement_cell_m: 0.5  # coarser grid used when searching router positions
+
+model:                 # multi-wall path-loss model, fitted as a MAP linear regression
+  prior:
+    a_dbm: -40.0       # expected signal at 1 m from the router
+    n: 2.8             # path-loss exponent (2 = free space, 3-4 = cluttered indoors)
+    wall_db: {light: 3.0, interior: 6.0, heavy: 12.0}   # loss per wall crossed
+  a_std: 12.0          # how far each parameter may move from its prior (1 sigma)
+  n_std: 0.8
+  wall_std: 4.0
+  noise_db: 3.0        # assumed scatter of measurements around the model
+  min_n: 1.5
+  max_n: 5.0
+  max_wall_db: 25.0
+
+gp:                    # Gaussian-process correction of what the model misses
+  sigma_f_db: 4.0      # typical size of leftover shadowing
+  length_m: 3.0        # distance over which leftover shadowing stays correlated
+  sigma_n_db: 2.5      # measurement noise (fast fading) per spot
+
+survey:
+  readings_per_spot: 5
+  reading_interval_s: 0.4
+  min_points_warn: 10
+
+placement:
+  top_k: 3
+  min_separation_m: 1.5
+  wall_clearance_m: 0.3
+  backhaul_min_dbm: -65   # an extender must hear the router at least this well
+  next_spots: 3
+  next_spot_separation_m: 2.0
+  default_model_rmse_db: 6.0   # used when there are too few points to cross-validate
+
+zones:
+  min_area_m2: 1.0
+
+server:
+  host: 127.0.0.1
+  port: 8000
+  mode: simulate        # simulate | real
+  sim_seed: 3

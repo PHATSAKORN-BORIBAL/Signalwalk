@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SignalWalk: Wi-Fi coverage by walking around</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark" aria-hidden="true"><i></i><i></i><i></i></span>
+      <h1>SignalWalk</h1>
+    </div>
+    <span id="plan-name" class="plan-name"></span>
+    <span id="mode-badge" class="badge" hidden></span>
+  </header>
+
+  <main class="layout">
+    <section class="stage" aria-label="Floor plan">
+      <p id="hint" class="hint"></p>
+      <div class="toolbar">
+        <label class="check"><input type="checkbox" id="opt-confidence"> Show confidence</label>
+        <label class="check"><input type="checkbox" id="opt-advice" checked> Show advice</label>
+        <span class="spacer"></span>
+        <button id="btn-auto" class="btn" type="button" hidden>Auto-survey 10 spots</button>
+        <button id="btn-undo" class="btn" type="button">Undo last</button>
+        <button id="btn-reset" class="btn" type="button">Reset</button>
+      </div>
+      <div id="mapwrap" class="mapwrap">
+        <canvas id="map" aria-label="Wi-Fi coverage map. Click to measure at that spot."></canvas>
+        <div id="tooltip" class="tooltip" hidden></div>
+        <div id="busy" class="busy" hidden><span></span>Measuring. Stay still…</div>
+      </div>
+      <div class="legend">
+        <canvas id="legend-bar" width="260" height="12" aria-hidden="true"></canvas>
+        <div class="legend-labels"><span>-90 dBm dead</span><span>-70 weak</span><span>-55 strong</span></div>
+        <p class="fine">Dim areas (with "Show confidence") are far from any measurement: the map is guessing there.</p>
+      </div>
+      <p class="exports">
+        <a id="dl-csv" href="/api/export/survey.csv" download>Download survey (CSV)</a>
+        <a id="dl-svg" href="/api/export/heatmap.svg" download>Download heatmap (SVG)</a>
+      </p>
+    </section>
+
+    <aside class="rail">
+      <section class="card"><h2>Coverage</h2><div id="summary"></div></section>
+      <section class="card"><h2>Advice</h2><div id="advice"></div></section>
+      <section class="card"><h2>Weak and dead zones</h2><div id="zones"></div></section>
+      <section class="card"><h2>Room report card</h2><div id="rooms"></div></section>
+      <section id="card-warnings" class="card warn" hidden><h2>Heads-up</h2><ul id="warnings"></ul></section>
+      <section class="card"><h2>Measurements <span id="point-count" class="count"></span></h2><ul id="points" class="points"></ul></section>
+    </aside>
+  </main>
+
+  <div id="toast" class="toast" role="status" hidden></div>
+  <script src="/static/app.js"></script>
+</body>
+</html>
